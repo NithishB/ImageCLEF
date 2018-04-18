@@ -32,26 +32,21 @@ class CNN_model:
         classifier = Sequential()
 
         # Step 1 - Convolution
-        classifier.add(Convolution2D(96, (3, 3), input_shape = (64, 64, 33), activation = 'relu'))
+        classifier.add(Convolution2D(64, (3, 3), input_shape = (64, 64, 1), activation = 'relu'))
         classifier.add(MaxPooling2D(pool_size = (2, 2)))
 
         # Adding a second layer convolutional
-        classifier.add(Convolution2D(288, (3, 3), activation = 'relu'))
+        classifier.add(Convolution2D(32, (3, 3), activation = 'relu'))
         classifier.add(MaxPooling2D(pool_size = (2, 2)))
 
-        # Adding a third layer convolutional
-        classifier.add(Convolution2D(864, (3, 3), activation = 'relu'))
-        classifier.add(MaxPooling2D(pool_size = (2, 2)))
-        
-        # Adding a fourth layer convolutional
-        classifier.add(Convolution2D(2592, (3, 3), activation = 'relu'))
+        # Adding a second layer convolutional
+        classifier.add(Convolution2D(16, (3, 3), activation = 'relu'))
         classifier.add(MaxPooling2D(pool_size = (2, 2)))
         
         # Step 3 - Flattening
         classifier.add(Flatten())
 
         # Step 4 - Full connection
-        classifier.add(Dense(256, activation = 'relu'))
         classifier.add(Dense(128, activation = 'relu'))
         classifier.add(Dense(64, activation = 'relu'))
         classifier.add(Dense(32, activation = 'relu'))
@@ -70,8 +65,8 @@ class CNN_model:
             d = []
             for j in range(va.shape[2]):
                 l = []
-                for k in range(va.shape[0]):
-                    l.append(va[k][i][j])
+                #for k in range(va.shape[0]):
+                l.append(va[23][i][j])
                 d.append(l)
             t.append(d)
         return np.array(t)/255.0
@@ -113,7 +108,7 @@ class CNN_model:
                     x.append(self.reshaper(np.array(tif.imread("Data/Class wise Data/train/"+self.train_x[j][1]+"/"+self.train_x[j][0]))))
                 y = self.train_y[i:i+batch_size]
             x = np.array(x)
-            #print(x.shape, y.shape)
+            print(x.shape, y.shape)
             classifier.fit(x,y,epochs=num_epochs,shuffle=True)
 
 
@@ -127,8 +122,7 @@ ob = CNN_model()
 
 ob.data_create()
 
-
 # In[8]:
 
 
-ob.model_run(batch_size=150, num_epochs=3)
+ob.model_run(batch_size=100, num_epochs=3)
